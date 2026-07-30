@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claim the Contractor Time-Leak Audit | ConstructFlows</title>
+  <meta name="description" content="Submit your information to claim the ConstructFlows Contractor Time-Leak Audit." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F6F4EF;
+      --paper: #FFFFFF;
+      --black: #111111;
+      --muted: #666666;
+      --border: #E5E5E5;
+      --green: #2E7D32;
+      --display: 'Bebas Neue', 'Barlow Condensed', Impact, sans-serif;
+      --head: 'Barlow Condensed', Impact, sans-serif;
+      --body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+      --pad: clamp(24px, 5vw, 72px);
+      --max: 1280px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--black);
+      font-family: var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--black); color: var(--paper); }
+
+    .mono {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.25px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(246,244,239,.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      height: 64px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1.5px solid var(--black);
+      background: var(--paper);
+      font-size: 10px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 14px; }
+    .nav-links a { color: var(--muted); }
+    .nav-links a:hover { color: var(--black); }
+
+    .btn {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border: 1px solid var(--black);
+      background: transparent;
+      color: var(--black);
+      font-family: var(--body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--black); color: var(--paper); }
+
+    .page {
+      min-height: calc(100svh - 64px);
+      border-bottom: 1px solid var(--border);
+      background:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px),
+        var(--paper);
+      background-size: 56px 56px;
+    }
+    .page-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(44px, 8vh, 92px) var(--pad);
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(360px, 560px);
+      gap: clamp(32px, 6vw, 84px);
+      align-items: start;
+    }
+    h1, h2, h3 { margin: 0; text-transform: uppercase; }
+    h1 {
+      max-width: 760px;
+      font-family: var(--display);
+      font-size: clamp(58px, 7.8vw, 104px);
+      line-height: .86;
+      letter-spacing: -1.5px;
+    }
+    h2 {
+      font-family: var(--display);
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: .9;
+      letter-spacing: -1px;
+    }
+    .copy {
+      max-width: 650px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.55;
+    }
+    .proof-grid {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border: 1px solid var(--border);
+      background: var(--paper);
+    }
+    .proof-grid span {
+      padding: 14px;
+      border-right: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .proof-grid span:last-child { border-right: 0; }
+
+    .offer-card,
+    .form-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 50px rgba(17,17,17,.08);
+    }
+    .offer-card { margin-top: 32px; padding: 24px; }
+    .price { font-family: var(--display); font-size: 64px; line-height: .9; margin-top: 10px; }
+    .offer-card p { color: var(--muted); line-height: 1.65; }
+    .guarantee { border: 1px solid var(--black); padding: 14px; color: var(--black) !important; }
+
+    .form-card { padding: clamp(22px, 4vw, 34px); }
+    .form-head { padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
+    .form-head p { color: var(--muted); line-height: 1.6; margin-bottom: 0; }
+    form { display: grid; gap: 16px; }
+    .field { display: grid; gap: 8px; }
+    .field.two { grid-template-columns: 1fr 1fr; gap: 14px; }
+    label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    input, select, textarea {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      background: #FAFAFA;
+      padding: 13px 14px;
+      font: 500 14px/1.4 var(--body);
+      color: var(--black);
+      outline: none;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: var(--black); background: var(--paper); }
+    .status {
+      display: none;
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .status.show { display: block; }
+    .small { color: var(--muted); font-size: 12px; line-height: 1.55; margin: 0; }
+
+    footer {
+      padding: 22px var(--pad);
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .page-inner { grid-template-columns: 1fr; }
+      .field.two { grid-template-columns: 1fr; }
+      .proof-grid { grid-template-columns: 1fr; }
+      .proof-grid span { border-right: 0; border-bottom: 1px solid var(--border); }
+      .proof-grid span:last-child { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html"><span class="mark">CF</span><span>ConstructFlows</span></a>
+      <div class="nav-links">
+        <a class="mono" href="index.html#calculator">Calculator</a>
+        <a class="mono" href="index.html#offer">Offer</a>
+        <a class="mono" href="constructflows-services-pricing.html">Pricing</a>
+      </div>
+      <a class="btn btn-primary" href="index.html#offer">View Offer</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-inner">
+      <section>
+        <div class="mono">Claim the offer</div>
+        <h1>Find the 260 Hours I’m Losing.</h1>
+        <p class="copy">Give us 45 minutes.</p>
+        <p class="copy">We will show you where paperwork, missed handoffs, and billing problems are stealing at least five hours from your week.</p>
+        <div class="proof-grid" aria-label="Offer details">
+          <span>45-minute review</span>
+          <span>$499 fixed price</span>
+          <span>5 hrs/week guarantee</span>
+        </div>
+        <aside class="offer-card">
+          <div class="mono">Contractor Time-Leak Audit</div>
+          <div class="price">$499</div>
+          <p>We review how work moves through your business, identify the biggest time leaks, and give you a clear plan to remove them.</p>
+          <p class="guarantee"><strong>If we cannot find at least five recoverable hours per week, you get 100% of your money back.</strong></p>
+        </aside>
+      </section>
+
+      <section class="form-card" aria-labelledby="contact-title">
+        <div class="form-head">
+          <div class="mono">Contact form</div>
+          <h2 id="contact-title">Send your information.</h2>
+          <p>Submit the form and the request will be emailed to ConstructionFlows.</p>
+        </div>
+        <form id="claimOfferForm" action="https://formsubmit.co/hello@constructionflows.com" method="POST">
+          <input type="hidden" name="_subject" id="emailSubject" value="Contractor Time-Leak Audit request" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" id="nextUrl" value="" />
+          <input type="hidden" name="offer" value="$499 Contractor Time-Leak Audit" />
+          <input type="hidden" name="submitted_from" id="submittedFrom" value="" />
+          <input type="hidden" name="submitted_at" id="submittedAt" value="" />
+          <div class="field two">
+            <div>
+              <label for="name">Name</label>
+              <input id="name" name="name" autocomplete="name" required />
+            </div>
+            <div>
+              <label for="company">Company</label>
+              <input id="company" name="company" autocomplete="organization" required />
+            </div>
+          </div>
+          <div class="field two">
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" />
+            </div>
+          </div>
+          <div class="field two">
+            <div>
+              <label for="trade">Trade / business type</label>
+              <select id="trade" name="trade">
+                <option value="">Select trade / business type</option>
+                <option>Electrical contractor</option>
+                <option>Mechanical contractor</option>
+                <option>HVAC contractor</option>
+                <option>Plumbing contractor</option>
+                <option>General contractor</option>
+                <option>Excavation / site work</option>
+                <option>Concrete / masonry</option>
+                <option>Framing / carpentry</option>
+                <option>Roofing / siding</option>
+                <option>Finish trade</option>
+                <option>Other specialty contractor</option>
+              </select>
+            </div>
+            <div>
+              <label for="bestTime">Best time to talk</label>
+              <select id="bestTime" name="bestTime">
+                <option value="">Select best time</option>
+                <option>Weekday morning</option>
+                <option>Weekday afternoon</option>
+                <option>Early evening</option>
+                <option>Monday or Wednesday</option>
+                <option>Tuesday or Thursday</option>
+                <option>Friday</option>
+                <option>Text me first</option>
+                <option>Email me first</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="biggestLeak">Where are the hours leaking right now?</label>
+            <select id="biggestLeak" name="biggestLeak">
+              <option>Paperwork and data entry</option>
+              <option>Chasing updates and missing information</option>
+              <option>Rebuilding job history</option>
+              <option>Billing and timecard cleanup</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Anything else we should know?</label>
+            <textarea id="message" name="message" placeholder="Tell us what is slowing down jobs, billing, follow-up, or handoffs."></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit Information</button>
+          <div class="status" id="formStatus">Submitting your offer request…</div>
+          <p class="small">Prefer direct email? Send details to <a href="mailto:hello@constructionflows.com">hello@constructionflows.com</a>.</p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner mono">
+      <span>ConstructionFlows</span>
+      <span>hello@constructionflows.com</span>
+      <span>© 2026 · Contractor Time-Leak Audit</span>
+    </div>
+  </footer>
+
+  <script>
+    const form = document.getElementById('claimOfferForm');
+    const status = document.getElementById('formStatus');
+    const emailSubject = document.getElementById('emailSubject');
+    const nextUrl = document.getElementById('nextUrl');
+    const submittedFrom = document.getElementById('submittedFrom');
+    const submittedAt = document.getElementById('submittedAt');
+
+    function fieldValue(id) {
+      return document.getElementById(id)?.value?.trim() || 'Not provided';
+    }
+
+    function prepareEmailSubmission() {
+      const company = fieldValue('company');
+      emailSubject.value = `Contractor Time-Leak Audit request — ${company}`;
+      submittedFrom.value = window.location.href;
+      submittedAt.value = new Date().toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+      nextUrl.value = new URL('constructflows-thank-you.html', window.location.href).href;
+    }
+
+    window.prepareEmailSubmission = prepareEmailSubmission;
+
+    form.addEventListener('submit', () => {
+      prepareEmailSubmission();
+      status.classList.add('show');
+    });
+  </script>
+</body>
+</html>

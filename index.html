@@ -1,0 +1,1963 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <title>Construction Current State Assessment | ConstructFlows</title>
+ <meta name="description" content="Find the admin drag, billing leakage, and workflow gaps slowing down your construction operation — before you build another system." />
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <style>
+   :root {
+     --bg: #F6F4EF;
+     --paper: #FFFFFF;
+     --black: #111111;
+     --muted: #666666;
+     --border: #E5E5E5;
+     --orange: #F97316;
+     --green: #2E7D32;
+     --display: 'Bebas Neue', 'Barlow Condensed', Impact, sans-serif;
+     --head: 'Barlow Condensed', Impact, sans-serif;
+     --body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+     --mono: 'IBM Plex Mono', monospace;
+     --pad: clamp(24px, 5vw, 72px);
+     --max: 1280px;
+   }
+
+   * { box-sizing: border-box; }
+   html { scroll-behavior: smooth; }
+   body {
+     margin: 0;
+     background: var(--bg);
+     color: var(--black);
+     font-family: var(--body);
+     -webkit-font-smoothing: antialiased;
+   }
+   a { color: inherit; text-decoration: none; }
+   ::selection { background: var(--black); color: var(--paper); }
+
+   .mono {
+     font-family: var(--mono);
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 1.25px;
+     text-transform: uppercase;
+     color: var(--muted);
+   }
+
+   .nav {
+     position: sticky;
+     top: 0;
+     z-index: 10;
+     background: rgba(246,244,239,.96);
+     border-bottom: 1px solid var(--border);
+     backdrop-filter: blur(10px);
+   }
+   .nav-inner {
+     max-width: var(--max);
+     height: 64px;
+     margin: 0 auto;
+     padding: 0 var(--pad);
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 24px;
+   }
+   .brand {
+     display: inline-flex;
+     align-items: center;
+     gap: 12px;
+     font-family: var(--mono);
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 2px;
+     text-transform: uppercase;
+   }
+   .mark {
+     width: 34px;
+     height: 34px;
+     display: grid;
+     place-items: center;
+     border: 1.5px solid var(--black);
+     background: var(--paper);
+     font-size: 10px;
+   }
+   .nav-links {
+     display: flex;
+     align-items: center;
+     gap: 14px;
+   }
+   .nav-links a { color: var(--muted); }
+   .nav-links a:hover { color: var(--black); }
+
+   .btn {
+     display: inline-flex;
+     min-height: 46px;
+     align-items: center;
+     justify-content: center;
+     padding: 14px 22px;
+     border: 1px solid var(--black);
+     font-size: 12px;
+     font-weight: 700;
+     letter-spacing: .7px;
+     text-transform: uppercase;
+     transition: transform .15s ease, background .15s ease;
+   }
+   .btn:hover { transform: translateY(-1px); }
+   .btn-primary { background: var(--black); color: var(--paper); }
+   .btn-secondary { background: var(--paper); color: var(--black); border-color: var(--border); }
+
+   .blueprint {
+     position: relative;
+     overflow: hidden;
+     background:
+       linear-gradient(var(--border) 1px, transparent 1px),
+       linear-gradient(90deg, var(--border) 1px, transparent 1px),
+       var(--paper);
+     background-size: 56px 56px;
+   }
+   .blueprint > * { position: relative; z-index: 1; }
+
+   .hero {
+     border-bottom: 1px solid var(--border);
+     min-height: calc(100svh - 64px);
+     display: grid;
+     align-items: center;
+   }
+   .hero-inner {
+     max-width: var(--max);
+     margin: 0 auto;
+     width: 100%;
+     padding: clamp(12px, 3vh, 40px) var(--pad);
+     display: grid;
+     grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+     gap: clamp(34px, 6vw, 78px);
+     align-items: center;
+   }
+   .eyebrow {
+     display: inline-flex;
+     align-items: center;
+     gap: 12px;
+     margin-bottom: 24px;
+   }
+   .eyebrow::before {
+     content: "";
+     width: 44px;
+     height: 1px;
+     background: var(--black);
+   }
+   h1, h2, h3 { margin: 0; text-transform: uppercase; }
+   h1 {
+     max-width: 760px;
+     font-family: var(--display);
+     font-size: clamp(56px, 7.8vw, 100px);
+     line-height: .86;
+     letter-spacing: -1.5px;
+   }
+   h2 {
+     font-family: var(--display);
+     font-size: clamp(46px, 6vw, 82px);
+     line-height: .9;
+     letter-spacing: -1px;
+   }
+   h3 {
+     font-family: var(--head);
+     font-size: 29px;
+     line-height: .95;
+   }
+   p {
+     color: var(--muted);
+     line-height: 1.7;
+   }
+   .hero-copy {
+     max-width: 650px;
+     margin: 22px 0 0;
+     font-size: clamp(16px, 1.35vw, 19px);
+   }
+   .hero-actions {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 12px;
+     margin-top: 28px;
+   }
+
+   .spec-card {
+     background: var(--paper);
+     border: 1px solid var(--border);
+     box-shadow: 0 18px 50px rgba(17,17,17,.055);
+   }
+   .spec-row {
+     display: flex;
+     justify-content: space-between;
+     gap: 20px;
+     padding: 16px 18px;
+     border-bottom: 1px solid var(--border);
+     font-family: var(--mono);
+     font-size: 11px;
+     letter-spacing: 1px;
+     text-transform: uppercase;
+   }
+   .spec-row:last-child { border-bottom: 0; }
+   .spec-row strong { color: var(--black); text-align: right; }
+
+   .drawing-sheet {
+     background: var(--paper);
+     border: 1px solid var(--black);
+     box-shadow: 0 18px 50px rgba(17,17,17,.075);
+     position: relative;
+   }
+   .drawing-sheet::before {
+     content: "";
+     position: absolute;
+     inset: 14px;
+     border: 1px solid var(--border);
+     pointer-events: none;
+   }
+   .drawing-head {
+     padding: 14px 18px;
+     border-bottom: 1px solid var(--border);
+     display: flex;
+     justify-content: space-between;
+     gap: 20px;
+   }
+   .drawing-body { padding: 18px 20px 18px; }
+   .drawing-title {
+     font-family: var(--display);
+     font-size: clamp(54px, 5.6vw, 76px);
+     line-height: .82;
+     letter-spacing: -1px;
+     margin: 0 0 16px;
+   }
+   .drawing-note {
+     border-top: 1px solid var(--border);
+     padding: 13px 0 0;
+     margin: 13px 0 0;
+     color: var(--muted);
+     font-size: 12.5px;
+     line-height: 1.55;
+   }
+   .drawing-note strong { color: var(--black); }
+   .drawing-title-block {
+     display: grid;
+     grid-template-columns: 1fr auto;
+     border-top: 1px solid var(--black);
+     margin-top: 16px;
+     padding-top: 12px;
+     gap: 18px;
+     align-items: end;
+   }
+
+   section { border-bottom: 1px solid var(--border); scroll-margin-top: 65px; }
+   .section-inner {
+     max-width: var(--max);
+     margin: 0 auto;
+     padding: 86px var(--pad);
+   }
+   #calculator {
+     min-height: calc(100svh - 64px);
+     display: grid;
+     align-items: center;
+   }
+   #calculator .section-inner { padding: 4px var(--pad); }
+   #calculator h2 { font-size: clamp(28px, 3vw, 38px); max-width: none; }
+   #calculator .section-copy {
+     max-width: none;
+     margin: 6px 0 0;
+     font-size: 13px;
+     line-height: 1.3;
+   }
+   .split {
+     display: grid;
+     grid-template-columns: .85fr 1.15fr;
+     gap: clamp(36px, 6vw, 86px);
+     align-items: start;
+   }
+   .section-copy { max-width: 650px; margin-top: 22px; }
+
+   .list {
+     background: var(--paper);
+     border: 1px solid var(--border);
+   }
+   .list-item {
+     display: grid;
+     grid-template-columns: 72px 1fr;
+     gap: 20px;
+     padding: 22px 24px;
+     border-bottom: 1px solid var(--border);
+   }
+   .list-item:last-child { border-bottom: 0; }
+   .num {
+     font-family: var(--mono);
+     font-size: 11px;
+     color: var(--muted);
+     letter-spacing: 1px;
+   }
+   .list-item p { margin: 8px 0 0; }
+
+   .cards {
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     border: 1px solid var(--border);
+     background: var(--paper);
+     margin-top: 40px;
+   }
+   .card {
+     min-height: 260px;
+     padding: 28px 24px;
+     border-right: 1px solid var(--border);
+   }
+   .card:last-child { border-right: 0; }
+   .card .bar {
+     width: 100%;
+     height: 5px;
+     background: var(--black);
+     margin-bottom: 24px;
+   }
+   .card:nth-child(2) .bar { background: var(--orange); }
+   .card:nth-child(3) .bar { background: var(--green); }
+
+   .cards.how-steps {
+     gap: 0;
+     align-items: start;
+     border: 0;
+     background: transparent;
+   }
+   .how-card {
+     min-height: 0;
+     height: fit-content;
+     align-self: start;
+     padding: 0;
+     border: 1px solid var(--border);
+     border-right: 0;
+     background: var(--paper);
+     cursor: pointer;
+     transition: background .15s ease, box-shadow .15s ease;
+   }
+   .how-card:last-child { border-right: 1px solid var(--border); }
+   .how-card:hover { background: #FBFAF7; }
+   .how-card[open] {
+     background: var(--paper);
+     box-shadow: inset 0 0 0 2px var(--black);
+   }
+   .how-card summary {
+     list-style: none;
+     cursor: pointer;
+     min-height: 272px;
+     padding: 28px 24px;
+     display: flex;
+     flex-direction: column;
+     outline: none;
+   }
+   .how-card summary:focus-visible { box-shadow: inset 0 0 0 3px var(--orange); }
+   .how-card summary::-webkit-details-marker { display: none; }
+   .how-card h3 { margin-top: 14px; }
+   .how-card summary p { margin-top: 12px; }
+   .how-card summary::after {
+     content: "View phase +";
+     display: inline-flex;
+     width: fit-content;
+     margin-top: auto;
+     border: 1px solid var(--black);
+     padding: 8px 10px;
+     font-family: var(--mono);
+     font-size: 10px;
+     letter-spacing: 1.2px;
+     text-transform: uppercase;
+     color: var(--black);
+     background: var(--paper);
+   }
+   .how-card[open] summary::after { content: "Hide details –"; background: var(--black); color: var(--paper); }
+   .how-card-detail {
+     padding: 0 24px 28px;
+     border-top: 1px solid var(--border);
+     animation: revealDetail .18s ease-out;
+   }
+   @keyframes revealDetail {
+     from { opacity: 0; transform: translateY(-6px); }
+     to { opacity: 1; transform: translateY(0); }
+   }
+   .how-card-detail p,
+   .how-card-detail li { color: var(--muted); }
+   .how-card-detail ul {
+     margin: 12px 0 0 18px;
+     line-height: 1.55;
+   }
+   .how-card-detail p:first-child { margin-top: 18px; }
+   .how-card .phase-tag {
+     width: fit-content;
+     border: 1px solid var(--border);
+     background: var(--bg);
+     padding: 6px 8px;
+   }
+   .how-card[open] .phase-tag { border-color: var(--black); color: var(--black); }
+   .how-hint {
+     margin-top: 18px;
+     display: inline-flex;
+     gap: 8px;
+     align-items: center;
+     border: 1px solid var(--border);
+     background: rgba(255,255,255,.72);
+     padding: 8px 10px;
+   }
+
+   .services-grid {
+     display: grid;
+     grid-template-columns: repeat(2, 1fr);
+     border: 1px solid var(--border);
+     background: var(--paper);
+     margin-top: 40px;
+   }
+   .service-card {
+     min-height: 330px;
+     padding: 30px 28px;
+     border-right: 1px solid var(--border);
+     border-bottom: 1px solid var(--border);
+   }
+   .service-card:nth-child(2n) { border-right: 0; }
+   .service-card:last-child {
+     grid-column: 1 / -1;
+     border-right: 0;
+     border-bottom: 0;
+   }
+   .service-card h3 {
+     max-width: 620px;
+     margin-top: 18px;
+     font-size: clamp(30px, 3.2vw, 44px);
+   }
+   .service-price {
+     font-family: var(--display);
+     font-size: clamp(48px, 5vw, 70px);
+     line-height: .85;
+     letter-spacing: -1px;
+     margin-top: 18px;
+   }
+   .service-card p { margin: 18px 0 0; }
+
+   .calculator-shell {
+     border: 1px solid var(--black);
+     background: var(--paper);
+     box-shadow: 0 22px 70px rgba(17,17,17,.08);
+     margin-top: 8px;
+   }
+   .calculator-topbar {
+     min-height: 28px;
+     padding: 5px 12px;
+     border-bottom: 1px solid var(--black);
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 18px;
+     background: var(--black);
+     color: var(--paper);
+   }
+   .calculator-topbar .mono { color: rgba(255,255,255,.72); }
+   .calculator-status {
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+   }
+   .calculator-status::before {
+     content: "";
+     width: 8px;
+     height: 8px;
+     border-radius: 999px;
+     background: var(--green);
+   }
+   .calc-steps {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     border-bottom: 1px solid var(--black);
+     background: var(--paper);
+   }
+   .calc-step {
+     padding: 5px 12px;
+     border-right: 1px solid var(--border);
+     display: grid;
+     gap: 3px;
+   }
+   .calc-step:last-child { border-right: 0; }
+   .calc-step strong {
+     font-family: var(--head);
+     font-size: 11px;
+     line-height: 1;
+     text-transform: uppercase;
+   }
+   .calculator-wrap {
+     display: grid;
+     grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+     gap: 12px;
+     align-items: start;
+     padding: 12px;
+     background: var(--paper);
+   }
+   .calculator-panel, .calculator-results {
+     background: var(--paper);
+     border: 1px solid var(--border);
+     box-shadow: none;
+   }
+   .calculator-panel {
+    display: grid;
+    align-self: start;
+    overflow: hidden;
+    background: var(--paper);
+    border-color: var(--black);
+    box-shadow: none;
+    color: var(--black);
+  }
+  .calculator-panel::before {
+    content: "DATA ENTRY CONSOLE / ACTIVE INPUT";
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--black);
+    background: var(--bg);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .calc-panel-head {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    background: var(--bg);
+  }
+  .calc-panel-head .mono { color: var(--muted); }
+  .calc-reset {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--black);
+  }
+  .calc-group-label {
+    padding: 5px 12px;
+    border-bottom: 1px solid var(--black);
+    background: var(--black);
+    color: var(--paper);
+  }
+  .calc-group-label .mono { color: rgba(255,255,255,.72); }
+  .calc-field {
+    padding: 4px 10px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 106px;
+    gap: 10px;
+    align-items: center;
+    background:
+      linear-gradient(90deg, rgba(17,17,17,.025), transparent 38%),
+      var(--paper);
+  }
+  .calc-field:focus-within {
+    background: var(--bg);
+    box-shadow: inset 3px 0 0 var(--black);
+  }
+  .calc-field:last-child { border-bottom: 0; }
+  .calc-field label {
+    display: grid;
+    gap: 2px;
+    font-weight: 700;
+    line-height: 1.12;
+    font-size: 11.5px;
+    color: var(--black);
+  }
+  .calc-field label::before {
+    content: "> DATA FIELD";
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1.4px;
+    color: var(--muted);
+  }
+  .calc-field small {
+    color: var(--muted);
+    font-weight: 400;
+    line-height: 1.15;
+    font-size: 9.5px;
+  }
+  .input-wrap {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: stretch;
+    border: 1px solid var(--black);
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px rgba(17,17,17,.03);
+  }
+  .calc-field input {
+    width: 100%;
+    min-height: 28px;
+    border: 0;
+    background: transparent;
+    padding: 4px 8px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+    color: var(--black);
+    text-shadow: none;
+    outline: none;
+    caret-color: var(--black);
+  }
+  .calc-field input:focus { background: var(--paper); }
+  .input-unit {
+    min-width: 38px;
+    display: grid;
+    place-items: center;
+    border-left: 1px solid var(--black);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .7px;
+  }
+  .calculator-results {
+    padding: 8px;
+    overflow: hidden;
+    position: sticky;
+    top: 84px;
+    background: var(--paper);
+    border: 1px solid var(--black);
+    box-shadow: 0 14px 34px rgba(17,17,17,.08);
+  }
+  .calc-results-head {
+    padding: 7px 10px;
+    border: 1px solid var(--black);
+    border-bottom: 0;
+    background: var(--black);
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+  }
+  .calc-results-head .mono { color: rgba(255,255,255,.72); }
+  .screen-bezel {
+    border: 1px solid var(--black);
+    background: var(--bg);
+    padding: 8px;
+    position: relative;
+  }
+  .screen-bezel::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(17,17,17,.025),
+      rgba(17,17,17,.025) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+    z-index: 3;
+    mix-blend-mode: multiply;
+    opacity: .35;
+  }
+  .screen-inner {
+    position: relative;
+    z-index: 2;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    box-shadow: inset 0 0 0 1px rgba(17,17,17,.03);
+  }
+  .calc-display {
+    background: transparent;
+    color: var(--black);
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 18px;
+    align-items: end;
+  }
+  .calc-display .mono { color: var(--muted); }
+  .display-number {
+    font-family: var(--display);
+    font-size: clamp(42px, 4.2vw, 58px);
+    line-height: .82;
+    letter-spacing: -1px;
+    margin-top: 4px;
+    color: var(--black);
+    text-shadow: none;
+    grid-column: 1;
+  }
+  .display-subline {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.35;
+    max-width: 220px;
+    text-align: right;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    background: transparent;
+  }
+  .result-card {
+    min-height: 74px;
+    padding: 11px 12px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    align-content: space-between;
+    gap: 8px;
+  }
+  .result-card:nth-child(2n) { border-right: 0; }
+  .result-card:nth-last-child(-n+2) { border-bottom: 0; }
+  .result-card .mono { color: var(--muted); }
+  .result-value {
+    font-family: var(--display);
+    font-size: clamp(34px, 3.2vw, 44px);
+    line-height: .85;
+    letter-spacing: -1px;
+    margin-top: 3px;
+    color: var(--black);
+    text-shadow: none;
+  }
+  .result-value-stack {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+    align-items: baseline;
+    line-height: .82;
+  }
+  .result-value-stack span:last-child { color: var(--black); }
+  .calc-statement {
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    margin-top: 0;
+    padding: 8px;
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .calc-statement p {
+    margin: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    background: var(--paper);
+    color: var(--black);
+    font-size: clamp(10px, .85vw, 11.5px);
+    line-height: 1.25;
+    font-weight: 700;
+  }
+  .calc-statement p:last-child { margin-bottom: 0; }
+  .calc-cta {
+     margin-top: 0;
+     padding: 6px 8px;
+     border-top: 0;
+     background: var(--paper);
+     display: grid;
+     grid-template-columns: minmax(0, 1fr) auto;
+     gap: 4px 12px;
+     align-items: center;
+   }
+   .calc-cta h3 { font-size: clamp(16px, 1.45vw, 19px); }
+   .calc-cta p {
+     margin: 5px 0 0;
+     font-size: 10.5px;
+     line-height: 1.15;
+     display: none;
+   }
+   .calc-cta .btn {
+     grid-column: 2;
+     grid-row: 1 / span 2;
+     padding: 9px 14px;
+     white-space: nowrap;
+   }
+   .calc-disclaimer {
+     grid-column: 1 / -1;
+     margin-top: 4px;
+     font-size: 8px;
+     color: var(--muted);
+     font-family: var(--mono);
+     text-transform: uppercase;
+     letter-spacing: .7px;
+     line-height: 1.2;
+   }
+
+   .offer {
+     background: var(--black);
+     color: var(--paper);
+   }
+   .offer h2 { color: var(--paper); font-size: clamp(58px, 7vw, 82px); }
+   .offer p, .offer .mono { color: rgba(255,255,255,.68); }
+   .offer-box {
+     background: var(--paper);
+     color: var(--black);
+     padding: 30px;
+     border: 1px solid rgba(255,255,255,.18);
+   }
+   .price {
+     font-family: var(--display);
+     font-size: clamp(64px, 8vw, 98px);
+     line-height: .85;
+     margin: 10px 0 18px;
+   }
+   .offer-box p { color: var(--muted); }
+   .offer-detail {
+     display: grid;
+     gap: 12px;
+     margin-top: 18px;
+   }
+   .offer-detail p {
+     margin: 0;
+     padding-top: 12px;
+     border-top: 1px solid var(--border);
+     font-size: 15px;
+     line-height: 1.55;
+   }
+   .offer-guarantee {
+     border: 1px solid var(--black);
+     background: var(--bg);
+     padding: 14px;
+     font-weight: 800;
+     color: var(--black) !important;
+   }
+   .offer-risk {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     border: 1px solid var(--border);
+     margin-top: 18px;
+   }
+   .offer-risk span {
+     padding: 11px 12px;
+     font-family: var(--mono);
+     font-size: 10px;
+     line-height: 1.4;
+     letter-spacing: 1.4px;
+     text-transform: uppercase;
+     color: var(--muted);
+   }
+   .offer-risk span:first-child { border-right: 1px solid var(--border); }
+   .offer-box .btn { width: 100%; margin-top: 18px; }
+
+   .final {
+     background: var(--black);
+     color: var(--paper);
+   }
+   .final h2 { color: var(--paper); }
+   .final p, .final .mono { color: rgba(255,255,255,.68); }
+   .final .btn-primary { background: var(--paper); color: var(--black); border-color: var(--paper); }
+   .final-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+   .footer {
+     background: var(--black);
+     color: rgba(255,255,255,.5);
+   }
+   .footer-inner {
+     max-width: var(--max);
+     margin: 0 auto;
+     padding: 28px var(--pad);
+     display: flex;
+     justify-content: space-between;
+     gap: 24px;
+     flex-wrap: wrap;
+   }
+
+   @media (max-width: 960px) {
+     .hero { min-height: auto; }
+     .hero-inner, .split { grid-template-columns: 1fr; }
+     .cards, .services-grid, .calculator-wrap, .result-grid, .calc-steps { grid-template-columns: 1fr; }
+     .calculator-results { position: static; }
+     .card, .service-card { border-right: 0; border-bottom: 1px solid var(--border); }
+     .card:last-child { border-bottom: 0; }
+     .service-card:last-child { border-bottom: 0; }
+     .result-card { border-right: 0; }
+     .result-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+     .result-card:last-child { border-bottom: 0; }
+     .nav-links { display: none; }
+   }
+   @media (max-width: 640px) {
+     .hero-inner, .section-inner { padding-top: 62px; padding-bottom: 62px; }
+     h1 { font-size: 64px; }
+     h2 { font-size: 50px; }
+     .list-item { grid-template-columns: 1fr; gap: 10px; }
+     .offer-risk { grid-template-columns: 1fr; }
+     .offer-risk span:first-child { border-right: 0; border-bottom: 1px solid var(--border); }
+     .calc-field { grid-template-columns: 1fr; }
+     .calc-field input { text-align: left; }
+     .calculator-wrap { padding: 16px; }
+     .calculator-topbar, .calc-panel-head { align-items: flex-start; flex-direction: column; }
+     .display-number { font-size: 72px; }
+     .nav-inner { height: 58px; }
+     .nav-inner .btn { display: none; }
+   }
+
+
+    /* Screenshot-match architectural landing style */
+    :root {
+      --bg: #F3F0EC;
+      --paper: #FFFFFF;
+      --black: #0D0D0F;
+      --muted: #686868;
+      --border: #E7E3DE;
+      --grid: #EFEDEA;
+      --pad: 48px;
+      --max: none;
+    }
+    body { background: var(--paper); }
+    .nav {
+      background: #F3F0EC;
+      border-bottom: 1px solid #DEDAD4;
+      backdrop-filter: none;
+    }
+    .nav-inner {
+      max-width: none;
+      height: 58px;
+      padding: 0 0 0 48px;
+      gap: 0;
+    }
+    .brand {
+      gap: 12px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .mark {
+      width: 30px;
+      height: 30px;
+      background: #F8F7F4;
+      border: 1px solid var(--black);
+      font-size: 9px;
+      letter-spacing: .5px;
+    }
+    .nav-links {
+      margin-left: auto;
+      height: 100%;
+      gap: 0;
+      border-left: 1px solid #DEDAD4;
+    }
+    .nav-links a {
+      width: 124px;
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #DEDAD4;
+      color: #656565;
+      font-size: 10px;
+      letter-spacing: 2.3px;
+    }
+    .nav-inner > .btn { display: none; }
+    .blueprint,
+    .hero {
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        #FBFBFA;
+      background-size: 60px 60px;
+    }
+    .hero {
+      min-height: calc(100svh - 58px);
+      align-items: stretch;
+    }
+    .hero-inner {
+      max-width: none;
+      min-height: calc(100svh - 58px);
+      padding: 18px 48px 48px;
+      grid-template-columns: minmax(0, 760px) 1fr;
+      gap: 36px;
+      align-items: start;
+    }
+    .hero .drawing-sheet { display: none; }
+    .eyebrow { display: none; }
+    h1 {
+      max-width: 760px;
+      font-size: clamp(84px, 8.1vw, 118px);
+      line-height: .78;
+      letter-spacing: -2.8px;
+      margin-top: 0;
+    }
+    .hero-copy {
+      max-width: 610px;
+      margin-top: 28px;
+      font-size: 16px;
+      line-height: 1.65;
+      color: #686868;
+    }
+    .hero-actions {
+      margin-top: 34px;
+      gap: 10px;
+    }
+    .btn {
+      min-height: 42px;
+      padding: 13px 24px;
+      border-radius: 0;
+      font-family: var(--body);
+      font-size: 13px;
+      letter-spacing: .35px;
+      font-weight: 800;
+    }
+    .btn-cta {
+      position: relative;
+      isolation: isolate;
+      min-height: 64px;
+      padding: 0 0 0 18px;
+      align-items: stretch;
+      gap: 18px;
+      border: 2px solid var(--black);
+      background: var(--black);
+      color: var(--paper);
+      box-shadow: 7px 7px 0 var(--orange);
+      overflow: visible;
+      text-align: left;
+      transform: translate(-3px, -3px);
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .btn-cta:hover {
+      transform: translate(0, 0);
+      box-shadow: 3px 3px 0 var(--orange);
+    }
+    .btn-cta:focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 5px;
+    }
+    .cta-copy {
+      display: grid;
+      align-content: center;
+      gap: 3px;
+      padding: 9px 0;
+    }
+    .cta-kicker {
+      display: block;
+      font-family: var(--mono);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: 1.25px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.62);
+    }
+    .cta-main {
+      display: block;
+      font-family: var(--head);
+      font-size: 24px;
+      line-height: .9;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .cta-arrow {
+      width: 58px;
+      display: grid;
+      place-items: center;
+      border-left: 1px solid rgba(255,255,255,.22);
+      background: var(--paper);
+      color: var(--black);
+      font-family: var(--mono);
+      font-size: 22px;
+      line-height: 1;
+    }
+    .final .btn-cta {
+      background: var(--paper);
+      color: var(--black);
+      border-color: var(--paper);
+      box-shadow: 7px 7px 0 var(--orange);
+    }
+    .final .btn-cta:hover { box-shadow: 3px 3px 0 var(--orange); }
+    .final .btn-cta .cta-kicker { color: rgba(17,17,17,.56); }
+    .final .btn-cta .cta-arrow { background: var(--black); color: var(--paper); border-left-color: rgba(17,17,17,.14); }
+    @media (max-width: 640px) {
+      .btn-cta { width: 100%; max-width: 360px; }
+      .cta-main { font-size: 22px; }
+    }
+    .btn-secondary { background: rgba(255,255,255,.72); border-color: #DDD9D3; }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 24px;
+    }
+    .hero-badge {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      border: 1px solid #DDD9D3;
+      background: rgba(255,255,255,.55);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: #777;
+    }
+    @media (max-width: 960px) {
+      :root { --pad: 24px; }
+      .nav-inner { padding-left: 24px; }
+      .hero-inner { grid-template-columns: 1fr; padding-left: 24px; padding-right: 24px; }
+      h1 { font-size: clamp(66px, 17vw, 96px); }
+      .nav-links { display: none; }
+    }
+
+
+    /* Centered landing hero refinement */
+    .hero-inner {
+      grid-template-columns: minmax(0, 920px);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-left: clamp(24px, 6vw, 72px);
+      padding-right: clamp(24px, 6vw, 72px);
+    }
+    .hero h1 {
+      max-width: 920px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-copy {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-actions,
+    .hero-badges {
+      justify-content: center;
+    }
+
+
+
+    /* Embedded current-state quiz */
+    .quiz {
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        #FBFBFA;
+      background-size: 60px 60px;
+    }
+    .quiz-shell {
+      border: 1px solid var(--black);
+      background: var(--paper);
+    }
+    .quiz-topbar {
+      min-height: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 10px 14px;
+      background: var(--black);
+      color: var(--paper);
+    }
+    .quiz-topbar .mono { color: var(--paper); }
+    .quiz-progress {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(246,244,239,.72);
+    }
+    .quiz-progress-track {
+      height: 10px;
+      border: 1px solid var(--black);
+      background: var(--paper);
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--black);
+      transition: width .2s ease;
+    }
+    .quiz-layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 580px;
+    }
+    .quiz-sections {
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .quiz-section-tab {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 14px;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .quiz-section-tab strong {
+      font-family: var(--head);
+      font-size: 18px;
+      line-height: .95;
+      text-transform: uppercase;
+    }
+    .quiz-section-tab.active { background: var(--paper); box-shadow: inset 4px 0 0 var(--black); }
+    .quiz-section-tab.complete { background: #F7F6F2; }
+    .quiz-section-tab .count { text-align: right; color: var(--muted); }
+    .quiz-panel { padding: 26px; }
+    .quiz-question-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .quiz-question-head h3 {
+      max-width: 820px;
+      font-family: var(--display);
+      font-size: clamp(34px, 4.2vw, 58px);
+      line-height: .9;
+      letter-spacing: -1px;
+    }
+    .quiz-options {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .quiz-option {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: stretch;
+      min-height: 62px;
+      border: 1px solid var(--border);
+      background: var(--paper);
+      cursor: pointer;
+    }
+    .quiz-option input { position: absolute; opacity: 0; pointer-events: none; }
+    .quiz-option-letter {
+      display: grid;
+      place-items: center;
+      border-right: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+    .quiz-option-text {
+      padding: 13px 15px;
+      color: var(--black);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    .quiz-option:has(input:checked) {
+      border-color: var(--black);
+      box-shadow: inset 0 0 0 2px var(--black);
+      background: var(--bg);
+    }
+    .quiz-option:has(input:checked) .quiz-option-letter { background: var(--black); color: var(--paper); border-color: var(--black); }
+    .quiz-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .quiz-actions .btn[disabled] { opacity: .35; pointer-events: none; }
+    .quiz-result {
+      display: none;
+      border-top: 1px solid var(--black);
+      padding: 26px;
+      background: var(--paper);
+    }
+    .quiz-result.show { display: grid; gap: 20px; }
+    .quiz-result-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      border: 1px solid var(--border);
+    }
+    .quiz-score-card,
+    .quiz-priority-card { padding: 22px; }
+    .quiz-score-card { border-right: 1px solid var(--border); }
+    .quiz-score-number {
+      margin-top: 8px;
+      font-family: var(--display);
+      font-size: clamp(70px, 8vw, 112px);
+      line-height: .82;
+      letter-spacing: -2px;
+    }
+    .quiz-band {
+      margin-top: 10px;
+      font-family: var(--head);
+      font-size: 30px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .quiz-priority-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .quiz-priority-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.35;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+    }
+
+    .quiz-report {
+      display: grid;
+      gap: 28px;
+    }
+    .report-title {
+      font-family: var(--display);
+      font-size: clamp(54px, 7vw, 96px);
+      line-height: .86;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+    }
+    .report-overview {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      border: 1px solid var(--border);
+      background: var(--paper);
+    }
+    .report-overview > div { padding: 24px; }
+    .report-overview > div:first-child { border-right: 1px solid var(--border); }
+    .report-score {
+      font-family: var(--display);
+      font-size: clamp(64px, 8vw, 108px);
+      line-height: .82;
+      letter-spacing: -2px;
+    }
+    .report-card-list { display: grid; gap: 10px; margin-top: 14px; }
+    .report-mini-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+    }
+    .report-mini-card strong {
+      font-family: var(--head);
+      font-size: 22px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .report-body {
+      display: grid;
+      gap: 18px;
+    }
+    .report-section {
+      border: 1px solid var(--border);
+      background: var(--paper);
+      padding: 24px;
+    }
+    .report-section h4 {
+      font-family: var(--display);
+      font-size: clamp(40px, 5vw, 68px);
+      line-height: .9;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+    .report-section h5 {
+      margin-top: 20px;
+      font-family: var(--head);
+      font-size: 24px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .report-section ul {
+      margin: 10px 0 0 18px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .report-meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0 16px;
+    }
+    .report-chip {
+      display: inline-block;
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--bg);
+    }
+    .report-quote {
+      margin-top: 14px;
+      border-left: 4px solid var(--black);
+      padding: 12px 14px;
+      background: var(--bg);
+      font-weight: 800;
+    }
+    .report-final {
+      background: var(--black);
+      color: var(--paper);
+      border-color: var(--black);
+    }
+    .report-final p,
+    .report-final li { color: rgba(255,255,255,.72); }
+    @media (max-width: 900px) {
+      .report-overview { grid-template-columns: 1fr; }
+      .report-overview > div:first-child { border-right: 0; border-bottom: 1px solid var(--border); }
+    }
+
+    @media (max-width: 960px) {
+      .quiz-layout, .quiz-result-grid { grid-template-columns: 1fr; }
+      .quiz-sections, .quiz-score-card { border-right: 0; }
+      .quiz-score-card { border-bottom: 1px solid var(--border); }
+    }
+
+  </style>
+</head>
+<body>
+ <nav class="nav" aria-label="Primary navigation">
+   <div class="nav-inner">
+     <a class="brand" href="#top" aria-label="ConstructFlows home"><span class="mark">CF</span><span>Constructionflows</span></a>
+     <div class="nav-links mono">
+       <a href="#calculator">Calculator</a>
+       <a href="#problem">Problem</a>
+       <a href="#process">How it works</a>
+       <a href="constructflows-services-pricing.html">Pricing</a>
+       <a href="#offer">Offer</a>
+     </div>
+     <a class="btn btn-primary btn-cta" href="#calculator" aria-label="Find my five hours with the free time-leak calculator"><span class="cta-copy"><span class="cta-kicker">Free 2-min calculator</span><span class="cta-main">Find My 5 Hours</span></span><span class="cta-arrow" aria-hidden="true">→</span></a>
+   </div>
+ </nav>
+
+ <main id="top">
+   <header class="hero blueprint">
+     <div class="hero-inner">
+       <div>
+         <div class="eyebrow mono">Construction Current State Assessment</div>
+         <h1>How much of your company still depends on you?</h1>
+         <p class="hero-copy">You did not start a business to spend your nights doing paperwork. We find where paperwork, missed handoffs, and billing delays are costing you time, cash, and control of your business.</p>
+         <div class="hero-actions">
+           <a class="btn btn-primary btn-cta" href="#calculator" aria-label="Find my five hours with the free time-leak calculator"><span class="cta-copy"><span class="cta-kicker">Free 2-min calculator</span><span class="cta-main">Find My 5 Hours</span></span><span class="cta-arrow" aria-hidden="true">→</span></a>
+         </div>
+         <div class="hero-badges" aria-label="Assessment details">
+           <span class="hero-badge">45 minutes</span>
+           <span class="hero-badge">260 hrs/yr</span>
+           <span class="hero-badge">Built for contractors</span>
+         </div>
+         </div>
+
+       <aside class="drawing-sheet" aria-label="Contractor Time-Leak Audit drawing sheet">
+         <div class="drawing-head mono"><span>Sheet A-01</span><span>Time-Leak Audit</span></div>
+         <div class="drawing-body">
+           <div class="mono">Recoverable time</div>
+           <div class="drawing-title">260 HRS/YR</div>
+           <p class="drawing-note">We find at least five hours of recoverable time per week. That is 260 hours per year you can put back into running jobs, serving customers, growing the business, or getting home on time.</p>
+           <p class="drawing-note">For $499, we review how work moves through your company, identify the biggest time leaks, and give you a clear plan to remove them.</p>
+           <p class="drawing-note"><strong>If we cannot find at least five hours per week, you get 100% of your money back.</strong></p>
+           <div class="drawing-title-block">
+             <span class="mono">45 minutes in.</span>
+             <strong class="mono" style="color:#111;">260 hours/year back.</strong>
+           </div>
+         </div>
+       </aside>
+     </div>
+   </header>
+
+   <section id="calculator" class="blueprint">
+     <div class="section-inner">
+       <div class="mono">Contractor Time-Leak Calculator</div>
+       <h2>How much time is admin work stealing from your business?</h2>
+       <p class="section-copy">Estimate the weekly hours you spend on work that should be simpler, automated, or eliminated.</p>
+
+       <div class="calculator-shell">
+         <div class="calculator-topbar">
+           <div class="mono">Estimator Console / Live Calculation</div>
+           <div class="calculator-status mono">Updating instantly</div>
+         </div>
+         <div class="calc-steps" aria-label="Calculator steps">
+           <div class="calc-step"><span class="mono">Step 01</span><strong>Enter weekly hours</strong></div>
+           <div class="calc-step"><span class="mono">Step 02</span><strong>Set your hourly value</strong></div>
+           <div class="calc-step"><span class="mono">Step 03</span><strong>Read the annual impact</strong></div>
+         </div>
+
+         <div class="calculator-wrap">
+           <form class="calculator-panel" id="timeLeakCalculator" aria-label="Contractor Time-Leak Calculator">
+             <div class="calc-panel-head">
+               <div class="mono">Inputs</div>
+               <button class="calc-reset mono" type="button" id="resetCalculator">Reset defaults</button>
+             </div>
+             <div class="calc-group-label"><div class="mono">Step 01 / Weekly time leaks</div></div>
+             <div class="calc-field">
+               <label for="paperwork">Paperwork and data entry <small>Hours per week</small></label>
+               <div class="input-wrap"><input id="paperwork" name="paperwork" type="number" min="0" step="0.25" value="3" inputmode="decimal"><span class="input-unit">HRS</span></div>
+             </div>
+             <div class="calc-field">
+               <label for="chasing">Chasing updates and missing information <small>Hours per week</small></label>
+               <div class="input-wrap"><input id="chasing" name="chasing" type="number" min="0" step="0.25" value="2" inputmode="decimal"><span class="input-unit">HRS</span></div>
+             </div>
+             <div class="calc-field">
+               <label for="history">Rebuilding job history <small>Hours per week</small></label>
+               <div class="input-wrap"><input id="history" name="history" type="number" min="0" step="0.25" value="1" inputmode="decimal"><span class="input-unit">HRS</span></div>
+             </div>
+             <div class="calc-field">
+               <label for="billing">Billing and timecard cleanup <small>Hours per week</small></label>
+               <div class="input-wrap"><input id="billing" name="billing" type="number" min="0" step="0.25" value="1" inputmode="decimal"><span class="input-unit">HRS</span></div>
+             </div>
+             <div class="calc-group-label"><div class="mono">Step 02 / Value assumptions</div></div>
+             <div class="calc-field">
+               <label for="hourlyValue">What is an hour of your time worth? <small>Owner or key employee hourly value</small></label>
+               <div class="input-wrap"><input id="hourlyValue" name="hourlyValue" type="number" min="0" step="5" value="100" inputmode="decimal"><span class="input-unit">$/HR</span></div>
+             </div>
+             <div class="calc-field">
+               <label for="weeksPerYear">Working weeks per year <small>Use 50 to allow for time off</small></label>
+               <div class="input-wrap"><input id="weeksPerYear" name="weeksPerYear" type="number" min="1" max="52" step="1" value="50" inputmode="numeric"><span class="input-unit">WKS</span></div>
+             </div>
+           </form>
+
+           <div class="calculator-results" aria-live="polite">
+             <div class="calc-results-head">
+               <div class="mono">Step 03 / Results</div>
+               <div class="mono">Annual Impact</div>
+             </div>
+             <div class="screen-bezel">
+               <div class="screen-inner">
+                 <div class="calc-display">
+                   <div class="mono">Estimated annual value lost</div>
+                   <div class="display-number" id="annualValueHero">$35,000</div>
+                   <p class="display-subline">Then see what even 5 hours recovered each week gives back.</p>
+                 </div>
+
+                 <div class="result-grid">
+                   <div class="result-card"><div class="mono">Time lost each week</div><div class="result-value" id="weeklyLost">7 hrs</div></div>
+                   <div class="result-card"><div class="mono">Annual value lost</div><div class="result-value" id="annualValue">$35,000</div></div>
+                   <div class="result-card"><div class="mono">If 5 hrs are saved weekly</div><div class="result-value" id="weeklyRecovered">5 hrs</div></div>
+                   <div class="result-card"><div class="mono">Time + dollars back/year</div><div class="result-value result-value-stack"><span id="timeBack">250 hrs</span><span id="dollarsBack">$25,000</span></div></div>
+                 </div>
+
+                 <div class="calc-statement">
+                   <p id="workweeksStatement">You are losing approximately 8.8 full workweeks every year.</p>
+                   <p id="recoverableStatement">Recovering 5 hours per week would return 250 hours—and $25,000 of capacity—to your business every year.</p>
+                 </div>
+               </div>
+             </div>
+
+             <div class="calc-cta">
+               <h3>Find out where those hours are going.</h3>
+               <p>The Contractor Time-Leak Audit identifies the paperwork, missing information, and broken handoffs keeping you stuck in the business. If we cannot find at least five recoverable hours per week, you get your money back.</p>
+               <a class="btn btn-primary" href="#offer">See Offer</a>
+               <div class="calc-disclaimer">This estimate measures capacity tied up in administrative friction. It is not a guarantee of direct revenue or savings.</div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
+
+   <section id="problem">
+     <div class="section-inner split">
+       <div>
+         <div class="mono">The real problem</div>
+         <h2>You cannot fix what you cannot see.</h2>
+         <p class="section-copy">Most workflow problems hide between people, tools, and job phases. The assessment shows where the operation actually breaks.</p>
+       </div>
+       <div class="list" aria-label="Common workflow problems">
+         <div class="list-item"><div class="num">01</div><div><h3>Bid follow-up is inconsistent.</h3><p>Opportunities sit in spreadsheets, inboxes, and memory.</p></div></div>
+         <div class="list-item"><div class="num">02</div><div><h3>Job handoffs lose context.</h3><p>Estimating, PMs, field, and billing do not work from the same source of truth.</p></div></div>
+         <div class="list-item"><div class="num">03</div><div><h3>Change orders get rebuilt later.</h3><p>Photos, notes, approvals, labor, and materials are collected after the work is done.</p></div></div>
+         <div class="list-item"><div class="num">04</div><div><h3>Invoices wait on missing backup.</h3><p>Billing slows down because the field record is incomplete.</p></div></div>
+       </div>
+     </div>
+   </section>
+
+   <section id="process" class="blueprint">
+     <div class="section-inner">
+       <div class="mono">How it works</div>
+       <h2>How the Contractor Time-Leak Audit works.</h2>
+       <p class="section-copy">Four simple phases: a focused audit call, operational analysis, a practical time-leak report, and a review call. Click each phase to see what happens.</p>
+       <div class="how-hint mono">↳ Click a phase card to expand the details</div>
+
+       <div class="cards how-steps" aria-label="Contractor Time-Leak Audit phases">
+         <details class="card how-card" open>
+           <summary><div class="bar"></div><div class="num phase-tag">01 / Audit call</div><h3>45-Minute Call</h3><p>We talk through how the business actually runs today and find the work quietly draining your time.</p></summary>
+           <div class="how-card-detail">
+             <p>Not how the process is supposed to work. How it works today.</p>
+             <ul>
+               <li>Where your time went last week</li>
+               <li>What keeps landing back on your plate</li>
+               <li>Where jobs wait for information or approval</li>
+               <li>What you still do manually</li>
+               <li>Which tasks follow you home at night</li>
+             </ul>
+           </div>
+         </details>
+         <details class="card how-card">
+           <summary><div class="bar"></div><div class="num phase-tag">02 / Analysis</div><h3>Operational Analysis</h3><p>We review the conversation and separate the real workflow problems from the symptoms.</p></summary>
+           <div class="how-card-detail">
+             <p>Each opportunity is reviewed for impact, effort, cost, and realistic time savings.</p>
+             <ul>
+               <li>Repetitive paperwork and duplicate entry</li>
+               <li>Missing job information</li>
+               <li>Broken handoffs</li>
+               <li>Follow-up that depends on memory</li>
+               <li>Billing and timecard delays</li>
+             </ul>
+           </div>
+         </details>
+         <details class="card how-card">
+           <summary><div class="bar"></div><div class="num phase-tag">03 / Report</div><h3>Time-Leak Report</h3><p>You get a practical report showing where your time is going and what to fix first.</p></summary>
+           <div class="how-card-detail">
+             <p>No generic list of AI tools. Every recommendation ties back to a real operational problem.</p>
+             <ul>
+               <li>Your biggest time leaks</li>
+               <li>Top three opportunities</li>
+               <li>Estimated hours recovered per week</li>
+               <li>Priority plan by impact and effort</li>
+               <li>Recommended tools, costs, and implementation plan</li>
+             </ul>
+           </div>
+         </details>
+         <details class="card how-card">
+           <summary><div class="bar"></div><div class="num phase-tag">04 / Review</div><h3>Review Call</h3><p>We walk through the findings so you know what to fix, what to wait on, and what support makes sense.</p></summary>
+           <div class="how-card-detail">
+             <p>No pressure to buy a larger project. Take the plan and implement it yourself, or have us help.</p>
+             <ul>
+               <li>What is costing you the most time</li>
+               <li>What can be fixed quickly</li>
+               <li>What should wait</li>
+               <li>What you can handle internally</li>
+               <li>Where outside support may make sense</li>
+             </ul>
+             <p><strong>The promise:</strong> if we cannot find five hours per week, you get your money back.</p>
+           </div>
+         </details>
+       </div>
+     </div>
+   </section>
+
+   <section id="offer" class="offer">
+     <div class="section-inner split">
+       <div>
+         <div class="mono">The offer</div>
+         <h2>Find the five hours your business is stealing from you every week.</h2>
+         <p class="section-copy">Paperwork, missing job information, repeated follow-ups, timecard corrections, and billing delays quietly eat up hours every week.</p>
+         <p class="section-copy">The Contractor Time-Leak Audit shows exactly where those hours are going—and which simple tools and workflow changes can give them back.</p>
+       </div>
+       <aside class="offer-box">
+         <div class="mono">Contractor Time-Leak Audit</div>
+         <div class="price">$499</div>
+         <p>We review how work moves through your business, identify the biggest time leaks, and give you a clear plan to remove them.</p>
+         <div class="offer-detail">
+           <p class="offer-guarantee">If we cannot find at least five hours per week in recoverable time, you get 100% of your money back.</p>
+           <div class="offer-risk"><span>You risk 45 minutes.</span><span>The paperwork keeps costing you every week.</span></div>
+         </div>
+         <a class="btn btn-primary" href="constructflows-contact.html?offer=time-leak-audit">Claim Offer</a>
+       </aside>
+     </div>
+   </section>
+
+   <section id="quiz" class="quiz" hidden aria-hidden="true">
+     <div class="section-inner">
+       <div class="mono">Embedded Diagnostic</div>
+       <h2>Find where the business is leaking time.</h2>
+       <p class="section-copy">Answer the current-state questions below. Your score stays on this page and shows which workflow areas need attention first.</p>
+       <div class="quiz-shell" id="embeddedQuiz">
+         <div class="quiz-topbar"><div class="mono">Current State Diagnostic / Live Scoring</div><div class="mono" id="quizAnswered">0 / 35 answered</div></div>
+         <div class="quiz-progress"><div class="quiz-progress-track"><div class="quiz-progress-fill" id="quizProgressFill"></div></div><div class="mono" id="quizProgressText">0% complete</div></div>
+         <div class="quiz-layout">
+           <div class="quiz-sections" id="quizSections" aria-label="Quiz sections"></div>
+           <div class="quiz-panel">
+             <div class="quiz-question-head"><div><div class="mono" id="quizMeta">Question 01 / Visibility</div><h3 id="quizQuestion">Loading question...</h3></div><div class="mono" id="quizSectionName">Bidding</div></div>
+             <div class="quiz-options" id="quizOptions"></div>
+             <div class="quiz-actions"><button class="btn btn-secondary" type="button" id="quizPrev">Previous</button><button class="btn btn-primary" type="button" id="quizNext">Next</button></div>
+           </div>
+         </div>
+         <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+       </div>
+     </div>
+   </section>
+
+   <section class="final">
+     <div class="section-inner">
+       <div class="mono">Next step</div>
+       <h2>If everything runs through you, you are the system.</h2>
+       <p class="section-copy">We identify the calls, approvals, missing information, and decisions keeping the business dependent on you.</p>
+       <div class="final-actions">
+         <a class="btn btn-primary btn-cta" href="constructflows-contact.html?offer=time-leak-audit" aria-label="Claim the Contractor Time-Leak Audit offer"><span class="cta-copy"><span class="cta-kicker">$499 Time-Leak Audit</span><span class="cta-main">Claim My Offer</span></span><span class="cta-arrow" aria-hidden="true">→</span></a>
+         <a class="btn" href="mailto:hello@constructionflows.com?subject=Current%20State%20Assessment%20Request">Email Constructionflows</a>
+       </div>
+     </div>
+   </section>
+ </main>
+
+ <footer class="footer">
+   <div class="footer-inner mono">
+     <span>Constructionflows</span>
+     <span>hello@constructionflows.com</span>
+     <span>© 2026 · Current State Assessment</span>
+   </div>
+ </footer>
+ <script>
+   (() => {
+     const fields = ['paperwork', 'chasing', 'history', 'billing', 'hourlyValue', 'weeksPerYear'];
+     const defaults = { paperwork: 3, chasing: 2, history: 1, billing: 1, hourlyValue: 100, weeksPerYear: 50 };
+     const getNumber = (id) => {
+       const value = Number(document.getElementById(id)?.value || 0);
+       return Number.isFinite(value) && value > 0 ? value : 0;
+     };
+     const formatHours = (value) => `${Number.isInteger(value) ? value : value.toFixed(1)} hrs`;
+     const formatNumber = (value) => Number.isInteger(value) ? `${value}` : value.toFixed(1);
+     const formatCurrency = (value) => new Intl.NumberFormat('en-US', {
+       style: 'currency',
+       currency: 'USD',
+       maximumFractionDigits: 0
+     }).format(value);
+     const setText = (id, value) => {
+       const element = document.getElementById(id);
+       if (element) element.textContent = value;
+     };
+
+     function updateCalculator() {
+       const weeklyHours = getNumber('paperwork') + getNumber('chasing') + getNumber('history') + getNumber('billing');
+       const hourlyValue = getNumber('hourlyValue');
+       const weeksPerYear = getNumber('weeksPerYear') || 50;
+       const annualHours = weeklyHours * weeksPerYear;
+       const annualValue = annualHours * hourlyValue;
+       const fullWorkweeks = annualHours / 40;
+       const recoverableWeekly = 5;
+       const recoverableAnnualHours = recoverableWeekly * weeksPerYear;
+       const recoverableAnnualValue = recoverableAnnualHours * hourlyValue;
+
+       setText('weeklyLost', formatHours(weeklyHours));
+       setText('annualValue', formatCurrency(annualValue));
+       setText('annualValueHero', formatCurrency(annualValue));
+       setText('weeklyRecovered', formatHours(recoverableWeekly));
+       setText('timeBack', formatHours(recoverableAnnualHours));
+       setText('dollarsBack', formatCurrency(recoverableAnnualValue));
+       setText('workweeksStatement', `You are losing approximately ${formatNumber(fullWorkweeks)} full workweeks every year.`);
+       setText('recoverableStatement', `Even 5 hours saved per week returns ${formatNumber(recoverableAnnualHours)} hours—and ${formatCurrency(recoverableAnnualValue)} of capacity—to your business every year.`);
+     }
+
+     fields.forEach((id) => document.getElementById(id)?.addEventListener('input', updateCalculator));
+     document.getElementById('resetCalculator')?.addEventListener('click', () => {
+       fields.forEach((id) => {
+         const input = document.getElementById(id);
+         if (input) input.value = defaults[id];
+       });
+       updateCalculator();
+     });
+     updateCalculator();
+   })();
+
+  (() => {
+    const quizQuestions = [{"section": "BIDDING & PIPELINE", "type": "Visibility", "question": "How easily can your team see the current status of every active bid?", "options": ["In one centralized system with real-time status, owner, and due dates", "In structured spreadsheets that are regularly updated", "By checking multiple tools, emails, or individual notes", "There is no reliable way to see all active bids in one view"]}, {"section": "BIDDING & PIPELINE", "type": "Process", "question": "When a bid needs follow-up, what usually triggers the next action?", "options": ["A defined workflow with reminders, deadlines, and ownership", "A team member updates it manually in a structured process", "Someone remembers to follow up based on experience or habit", "Follow-up happens inconsistently or only when someone asks"]}, {"section": "BIDDING & PIPELINE", "type": "Failure Mode", "question": "How are stalled or inactive bids usually identified?", "options": ["The system flags inactivity automatically", "They are identified during regular pipeline reviews", "They are usually noticed later when someone checks back in", "They often go unnoticed until the opportunity is already cold or lost"]}, {"section": "BIDDING & PIPELINE", "type": "Accountability", "question": "How is ownership of each bid defined?", "options": ["One person is clearly assigned and visible for every bid", "Ownership is assigned, but not always visible in one place", "Multiple people are involved, but ownership is not always clear", "Ownership is unclear or changes without structure"]}, {"section": "BIDDING & PIPELINE", "type": "Cost / Cash", "question": "What is the typical cost of inefficiency in your bidding process?", "options": ["Minimal, with little rework or missed follow-up", "Some lost time, but generally manageable", "Noticeable time loss, duplicated effort, or delayed response", "Significant inefficiency that affects hit rate, labor, or revenue"]}, {"section": "PROJECT KICKOFF", "type": "Process", "question": "How standardized is your project kickoff process?", "options": ["Every project follows the same documented kickoff workflow", "A kickoff process exists, but it is not followed consistently", "The process is mostly informal and varies by PM", "There is no defined kickoff process"]}, {"section": "PROJECT KICKOFF", "type": "People Dependency", "question": "If the primary PM became unavailable right after award, what would happen?", "options": ["Another team member could take over with minimal disruption", "There would be some delay, but the handoff would be manageable", "Important information would need to be reconstructed or re-explained", "The project start would stall because too much depends on that person"]}, {"section": "PROJECT KICKOFF", "type": "Failure Mode", "question": "When project starts go poorly, what is usually the root cause?", "options": ["Issues are rare because startup gaps are usually caught early", "Minor coordination or setup items are occasionally missed", "Required information, access, or responsibilities are often incomplete", "There is no consistent startup structure, so early confusion is common"]}, {"section": "PROJECT KICKOFF", "type": "Accountability", "question": "How clearly is ownership defined during kickoff?", "options": ["Each kickoff step has a clearly assigned owner", "Ownership is generally understood, even if not always documented", "Ownership is shared across people, which creates some ambiguity", "Ownership is often unclear at the start of the job"]}, {"section": "PROJECT KICKOFF", "type": "Cost / Cash", "question": "What is the downstream impact when kickoff is weak or inconsistent?", "options": ["Minimal impact because issues are corrected early", "Some inefficiency, but it stays contained", "It creates rework, delays, or extra coordination later", "It creates significant schedule, labor, or cost impact downstream"]}, {"section": "SCHEDULING", "type": "Process", "question": "How is the working project schedule managed day to day?", "options": ["In one centralized system that serves as the current schedule", "In a structured format that is updated regularly", "Through shared files, messages, or manual coordination", "Through multiple versions with no clear source of truth"]}, {"section": "SCHEDULING", "type": "Visibility", "question": "When the schedule changes, how visible is that update to the people affected?", "options": ["The update is visible immediately to everyone who needs it", "The update is communicated through a standard process", "The update is shared manually and may not reach everyone quickly", "Visibility is inconsistent, and people may continue using old information"]}, {"section": "SCHEDULING", "type": "Failure Mode", "question": "How often do people end up working from an outdated schedule?", "options": ["Rarely or never, because outdated versions are controlled", "Occasionally, but the issue is caught quickly", "It happens often enough to create confusion or rework", "It happens regularly and causes recurring coordination problems"]}, {"section": "SCHEDULING", "type": "Accountability", "question": "How clear is ownership of the live project schedule?", "options": ["One person clearly owns the current schedule", "Ownership is generally understood, even if not formalized", "Multiple people update or manage it, which creates some ambiguity", "No one clearly owns the current schedule"]}, {"section": "SCHEDULING", "type": "Cost / Cash", "question": "What is the typical impact when teams are misaligned on schedule?", "options": ["Minimal, with little or no downstream effect", "Some lost efficiency, but manageable", "Rework, lost labor time, or delayed execution", "Significant schedule disruption or avoidable cost impact"]}, {"section": "RFIS & SUBMITTALS", "type": "Process", "question": "How are RFIs and submittals managed from start to close?", "options": ["In one structured workflow with status, ownership, and due dates", "In a mostly structured process with some manual gaps", "Across multiple tools, emails, or trackers", "Without a consistent process or tracking method"]}, {"section": "RFIS & SUBMITTALS", "type": "Accountability", "question": "How clearly is ownership defined for each RFI or submittal?", "options": ["A current owner is clearly assigned at every stage", "Ownership is assigned, but not always easy to confirm", "Ownership shifts informally based on who is involved", "Ownership is often unclear or assumed"]}, {"section": "RFIS & SUBMITTALS", "type": "Failure Mode", "question": "When RFIs or submittals are delayed, where do they usually break down?", "options": ["Delays are rare because issues are surfaced early", "Delays happen occasionally at handoffs or approvals", "Delays happen regularly because follow-up or visibility is inconsistent", "Delays are common and usually discovered after they affect the job"]}, {"section": "RFIS & SUBMITTALS", "type": "Visibility", "question": "How easily can you see the current status of an RFI or submittal?", "options": ["Instantly, in one place with linked documents and status", "Mostly visible, with occasional manual checking", "Visible, but only after searching across tools or emails", "Difficult to determine without asking around"]}, {"section": "RFIS & SUBMITTALS", "type": "Cost / Cash", "question": "What is the usual project impact of delayed RFIs or submittals?", "options": ["Minimal, because delays are rare or quickly resolved", "Some pressure, but generally manageable", "Noticeable schedule or coordination impact", "Significant delay, rework, or cost impact on the project"]}, {"section": "PROJECT VISIBILITY", "type": "Visibility", "question": "How easily can leadership see current project health across active jobs?", "options": ["Through real-time dashboards with current status and risk visibility", "Through regular reports that provide a solid picture", "Through updates gathered from meetings, emails, or individual check-ins", "Visibility is limited and often based on perception rather than current data"]}, {"section": "PROJECT VISIBILITY", "type": "Process", "question": "How are project risks identified before they become bigger issues?", "options": ["Through a defined process with regular tracking and escalation", "Through structured reviews or recurring check-ins", "As part of normal conversation when something starts to feel off", "Mostly after the impact is already visible"]}, {"section": "PROJECT VISIBILITY", "type": "Failure Mode", "question": "When project issues surface, how early are they typically identified?", "options": ["Early enough to act before material impact", "After a slight delay, but still internally identified", "Late, once the issue has started affecting execution", "After impact, often through escalation or outside pressure"]}, {"section": "PROJECT VISIBILITY", "type": "Accountability", "question": "How clear is ownership for identifying and escalating project risk?", "options": ["Risk ownership is clearly defined and consistently followed", "Ownership is generally understood, even if not always formalized", "Risk ownership is shared, so escalation can be inconsistent", "It is often unclear who is responsible for surfacing risk"]}, {"section": "PROJECT VISIBILITY", "type": "Cost / Cash", "question": "What is the usual impact of identifying project issues late?", "options": ["Minimal, because most issues are contained quickly", "Some extra coordination or delay, but manageable", "Noticeable schedule pressure, labor inefficiency, or missed decisions", "Significant cost, delay, or margin impact"]}, {"section": "FIELD EXECUTION", "type": "Process", "question": "How are daily field assignments communicated and confirmed?", "options": ["Through a structured process tied to the current plan or schedule", "Through a consistent routine led by field leadership", "Through informal conversations, texts, or day-of coordination", "Ad hoc, with no consistent process"]}, {"section": "FIELD EXECUTION", "type": "People Dependency", "question": "How dependent is field execution on specific individuals to keep work moving?", "options": ["Low dependency because direction is documented and repeatable", "Some dependency, but others can step in when needed", "High dependency on key individuals for coordination and clarity", "Critical dependency, where work breaks down without specific people"]}, {"section": "FIELD EXECUTION", "type": "Failure Mode", "question": "When field confusion happens, how often does it affect execution?", "options": ["Rarely, because priorities are usually clear", "Occasionally, but it is resolved quickly", "Frequently enough to cause lost time or misalignment", "Constantly enough to disrupt daily production"]}, {"section": "FIELD EXECUTION", "type": "Accountability", "question": "How clear is ownership for setting and communicating daily field priorities?", "options": ["Clearly assigned to a specific role every day", "Generally known, even if not always documented", "Shared across people, which can create inconsistency", "Often unclear who owns daily direction"]}, {"section": "FIELD EXECUTION", "type": "Cost / Cash", "question": "How much labor time is typically lost due to unclear or shifting daily direction?", "options": ["Very little", "Some, but not enough to materially affect productivity", "Noticeable lost time across crews or throughout the week", "Significant lost labor time that regularly affects production"]}, {"section": "CLOSEOUT", "type": "Process", "question": "How structured is your closeout process from punch to final completion?", "options": ["Fully structured with clear steps, requirements, and tracking", "Mostly structured, with a few manual gaps", "Managed manually through coordination and follow-up", "Largely reactive, with steps handled as issues arise"]}, {"section": "CLOSEOUT", "type": "Accountability", "question": "How clearly is ownership defined for closeout deliverables?", "options": ["Each item has a clear owner and due date", "Ownership is generally understood, even if not always tracked", "Ownership is shared, which creates some ambiguity", "Ownership is often unclear until something is overdue"]}, {"section": "CLOSEOUT", "type": "Failure Mode", "question": "When closeout gets delayed, what is usually true?", "options": ["Delays are uncommon because issues are identified early", "A few minor items remain open, but are manageable", "Documentation, approvals, or follow-up regularly hold things up", "Closeout delays are common and typically discovered late"]}, {"section": "CLOSEOUT", "type": "Visibility", "question": "How easily can your team see closeout status across active jobs?", "options": ["Fully visible in one place with current progress by item", "Mostly visible, with some manual follow-up needed", "Limited visibility that requires asking around or checking files", "No reliable view of closeout progress across jobs"]}, {"section": "CLOSEOUT", "type": "Cost / Cash", "question": "How predictable is final payment timing once the work is complete?", "options": ["Highly predictable and closely aligned with completion", "Slightly delayed, but generally manageable", "Regularly delayed due to missing items or loose closeout", "Frequently delayed in a way that affects cash flow"]}];
+    const sectionOrder = [...new Set(quizQuestions.map(q => q.section))];
+    const answers = new Array(quizQuestions.length).fill(null);
+    let index = 0;
+    const lensContent = {
+      'Process': {
+        title: 'Process',
+        measures: 'Whether your operation has clearly defined processing rules for how work moves from input → action → outcome, or if work is handled differently each time.',
+        strong: ['Every RFI follows the same path', 'Every project kickoff follows the same structure', 'Every bid moves through defined stages'],
+        weak: ['“It depends on the PM”', 'Steps are skipped or reordered', 'Workflows live in people’s heads'],
+        seeing: ['Inputs are handled differently depending on the person', 'No consistent next step when work enters the system', 'Execution relies on memory instead of structure'],
+        why: ['Work gets recreated every time', 'Execution becomes inconsistent', 'Small issues compound into larger problems'],
+        actions: ['Map your top 5 workflows: bid → kickoff → execution → closeout', 'Define “when X happens → do Y” for each step', 'Standardize sequence, ownership, and required inputs'],
+        exercise: 'Write down the last 3 projects you ran, step-by-step, as they actually happened. That is your current process.'
+      },
+      'Accountability': {
+        title: 'Accountability',
+        measures: 'Whether ownership is built into your system—or depends on follow-up.',
+        strong: ['Every task has a clearly assigned owner', 'Ownership is visible and tracked', 'Work does not move without responsibility'],
+        weak: ['“The team is handling it”', 'Tasks sit until someone follows up', 'Ownership changes depending on the situation'],
+        seeing: ['Ownership is unclear across RFIs, closeout, and field coordination', 'Tasks depend on reminders rather than assignment', 'Work is completed inconsistently'],
+        why: ['Work gets delayed', 'Issues fall through the cracks', 'No one is responsible for outcomes'],
+        actions: ['Assign an owner to every step in your workflows', 'Make ownership visible in a system', 'Eliminate shared responsibility without clarity'],
+        exercise: 'Take one workflow. For each step, answer: “Who is responsible for this being completed?” If you hesitate, you found a gap.'
+      },
+      'Failure Mode': {
+        title: 'Failure Mode',
+        measures: 'Whether your system detects problems early—or relies on people to notice them.',
+        strong: ['Aging RFIs are flagged automatically', 'Schedule delays are visible early', 'Issues are surfaced before impact'],
+        weak: ['Problems discovered during meetings', 'Issues identified after delays occur', 'Reliance on escalation'],
+        seeing: ['Issues are discovered late in the process', 'There are limited early warning indicators', 'Problems are identified through communication, not systems'],
+        why: ['Rework increases', 'Delays become harder to avoid', 'Cost shows up after the issue has already spread'],
+        actions: ['Track aging items: RFIs, tasks, approvals', 'Define thresholds like “RFI > 5 days = flagged”', 'Surface issues automatically'],
+        exercise: 'Ask: “How would I know something is off without asking anyone?” If the answer is unclear, no detection system exists.'
+      },
+      'People Dependency': {
+        title: 'People Dependency',
+        measures: 'How much your operation depends on specific individuals versus system-driven execution.',
+        strong: ['Work continues regardless of who is present', 'Knowledge is captured in systems', 'Processes are transferable'],
+        weak: ['“Only X knows how to do this”', 'Work stalls when people are unavailable', 'Knowledge lives in experience, not systems'],
+        seeing: ['Heavy reliance on PMs and foremen', 'Knowledge is not fully documented or systemized', 'Execution varies based on experience'],
+        why: ['Bottlenecks form around key people', 'Risk increases when someone is unavailable', 'Scalability is limited'],
+        actions: ['Document repeatable workflows', 'Capture decision logic in systems', 'Train teams on standardized processes'],
+        exercise: 'Ask: “If this person left tomorrow, what breaks?” That is your dependency risk.'
+      },
+      'Visibility': {
+        title: 'Visibility',
+        measures: 'Whether you can see what is happening in real time—or rely on updates and communication.',
+        strong: ['Project status visible instantly', 'Tasks, budgets, and timelines accessible', 'No need to ask for updates'],
+        weak: ['Status requires meetings or calls', 'Information is scattered', 'Teams operate with partial information'],
+        seeing: ['No single source of truth', 'Manual updates are required to understand status', 'Information is fragmented across tools'],
+        why: ['Decisions are delayed', 'Issues stay hidden', 'Teams become misaligned'],
+        actions: ['Create a centralized system for tracking work', 'Build dashboards for key metrics', 'Eliminate duplicate tracking'],
+        exercise: 'Ask: “Can I see the status of every active project in under 30 seconds?” If not, you have a visibility gap.'
+      },
+      'Cost / Cash': {
+        title: 'Cost / Cash',
+        measures: 'How operational inefficiencies translate into financial impact.',
+        strong: ['Delays and inefficiencies are tracked', 'Financial impact is visible', 'Decisions are tied to cost'],
+        weak: ['Time loss is untracked', 'Delays go unnoticed financially', 'Margins erode without visibility'],
+        seeing: ['Time loss in execution and coordination', 'Delays impacting profitability', 'No direct tie between workflow and cost'],
+        why: ['Lost labor compounds', 'Payments get delayed', 'Margins shrink quietly'],
+        actions: ['Track time and delays by workflow', 'Connect operational issues to cost impact', 'Identify high-cost inefficiencies'],
+        exercise: 'Ask: “Where are we losing time but not measuring it?” That is where margin is leaking.'
+      },
+      'Scalability': {
+        title: 'Scalability',
+        measures: 'Whether your operation can handle increased volume without breaking.',
+        strong: ['Systems handle increased workload', 'Workflows remain consistent', 'Teams do not rely on hero effort'],
+        weak: ['More work means more chaos', 'Teams become overloaded', 'Quality drops'],
+        seeing: ['Increased workload creates coordination issues', 'Systems rely on capacity, not structure', 'Execution breaks under pressure'],
+        why: ['Growth creates risk', 'Teams burn out', 'Execution quality drops'],
+        actions: ['Standardize workflows', 'Reduce manual steps', 'Build systems that handle volume'],
+        exercise: 'Ask: “If we doubled our workload tomorrow, what breaks first?” That is your scalability limit.'
+      }
+    };
+    const el = (id) => document.getElementById(id);
+    const letters = ['A','B','C','D'];
+    const sectionIndexes = (section) => quizQuestions.map((q, i) => q.section === section ? i : -1).filter(i => i >= 0);
+    const cleanType = (type) => type.replace('Cost / Cash', 'Cost / Cash');
+    const scoreBand = (score) => score >= 9 ? 'Installed System (Controlled Execution)' : score >= 5 ? 'Partial System (Inconsistent Execution)' : 'No System (Reactive Execution) ⚠️';
+    const lensScore = (type) => {
+      const indexes = quizQuestions.map((q, i) => cleanType(q.type) === type ? i : -1).filter(i => i >= 0);
+      const maxRisk = indexes.length * 3;
+      const risk = indexes.reduce((sum, i) => sum + (answers[i] ?? 0), 0);
+      return { type, risk, maxRisk, score: maxRisk ? Math.round(10 - ((risk / maxRisk) * 10)) : 0, questions: indexes.length };
+    };
+    const getLensScores = () => {
+      const base = ['Process', 'Accountability', 'Failure Mode', 'People Dependency', 'Visibility', 'Cost / Cash'].map(lensScore);
+      const byType = Object.fromEntries(base.map(item => [item.type, item]));
+      const scalabilityInputs = ['Process', 'Visibility', 'People Dependency', 'Cost / Cash'];
+      const scalability = Math.round(scalabilityInputs.reduce((sum, type) => sum + byType[type].score, 0) / scalabilityInputs.length);
+      return [...base, { type: 'Scalability', risk: 0, maxRisk: 0, score: scalability, questions: 0 }];
+    };
+    function list(items) { return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`; }
+    function renderTabs() {
+      const wrap = el('quizSections');
+      if (!wrap) return;
+      wrap.innerHTML = sectionOrder.map((section, sectionIndex) => {
+        const indexes = sectionIndexes(section);
+        const complete = indexes.filter(i => answers[i] !== null).length;
+        const active = quizQuestions[index].section === section;
+        return `<button class="quiz-section-tab ${active ? 'active' : ''} ${complete === indexes.length ? 'complete' : ''}" type="button" data-section="${section}"><span class="mono">${String(sectionIndex + 1).padStart(2,'0')}</span><strong>${section}</strong><span class="mono count">${complete}/5</span></button>`;
+      }).join('');
+      wrap.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+        index = sectionIndexes(button.dataset.section)[0];
+        renderQuiz();
+      }));
+    }
+    function updateProgress() {
+      const answered = answers.filter(value => value !== null).length;
+      const percent = Math.round((answered / quizQuestions.length) * 100);
+      el('quizAnswered').textContent = `${answered} / ${quizQuestions.length} answered`;
+      el('quizProgressText').textContent = `${percent}% complete`;
+      el('quizProgressFill').style.width = `${percent}%`;
+    }
+    function renderQuiz() {
+      const q = quizQuestions[index];
+      el('quizMeta').textContent = `Question ${String(index + 1).padStart(2,'0')} / ${q.type}`;
+      el('quizSectionName').textContent = q.section;
+      el('quizQuestion').textContent = q.question;
+      el('quizOptions').innerHTML = q.options.map((option, optionIndex) => `
+        <label class="quiz-option">
+          <input type="radio" name="quizOption" value="${optionIndex}" ${answers[index] === optionIndex ? 'checked' : ''}>
+          <span class="quiz-option-letter">${letters[optionIndex]}</span>
+          <span class="quiz-option-text">${option}</span>
+        </label>
+      `).join('');
+      el('quizOptions').querySelectorAll('input').forEach(input => input.addEventListener('change', () => {
+        answers[index] = Number(input.value);
+        updateProgress();
+        renderTabs();
+        renderResult();
+      }));
+      el('quizPrev').disabled = index === 0;
+      el('quizNext').textContent = index === quizQuestions.length - 1 ? 'View Results' : 'Next';
+      updateProgress();
+      renderTabs();
+      renderResult();
+    }
+    function openingInsight(lenses) {
+      const gaps = [...lenses].sort((a,b) => a.score - b.score).slice(0,2).map(item => item.type.toLowerCase()).join(' and ');
+      return `You do not have a single broken area. The pattern showing up is ${gaps}. Work is getting done, but the system is making people carry too much of the execution load.`;
+    }
+    function renderResult() {
+      const answered = answers.filter(value => value !== null).length;
+      const result = el('quizResult');
+      if (answered < quizQuestions.length) { result.classList.remove('show'); result.innerHTML = ''; return; }
+      const lenses = getLensScores();
+      const avg = Math.round(lenses.reduce((sum, item) => sum + item.score, 0) / lenses.length);
+      const strengths = [...lenses].sort((a,b) => b.score - a.score).slice(0,2);
+      const gaps = [...lenses].sort((a,b) => a.score - b.score).slice(0,2);
+      const strengthsMarkup = strengths[0].score >= 5
+        ? strengths.map(item => `<div class="report-mini-card"><strong>${item.type}</strong><span class="mono">${item.score}/10</span></div>`).join('')
+        : `<div class="report-mini-card"><strong>No installed strengths yet</strong><span class="mono">Focus on gaps</span></div>`;
+      const ordered = [...gaps, ...lenses.filter(item => !gaps.includes(item)).sort((a,b) => a.score - b.score)];
+      result.classList.add('show');
+      result.innerHTML = `<div class="quiz-report">
+        <div><div class="mono">Operations Diagnostic Report</div><div class="report-title">Here is what the assessment is showing.</div></div>
+        <div class="report-overview">
+          <div><div class="mono">Overall system score</div><div class="report-score">${avg}/10</div><div class="quiz-band">${scoreBand(avg)}</div><p>${openingInsight(lenses)}</p></div>
+          <div><div class="mono">What stands out</div><div class="report-card-list">
+            <div><div class="mono">Strongest areas</div>${strengthsMarkup}</div>
+            <div><div class="mono">Primary gaps</div>${gaps.map(item => `<div class="report-mini-card"><strong>${item.type} ⚠️</strong><span class="mono">${item.score}/10</span></div>`).join('')}</div>
+          </div></div>
+        </div>
+        <div class="report-section"><h4>How to read your score</h4><p>Each diagnostic lens is scored out of 10 points.</p><div class="report-card-list"><div class="report-mini-card"><strong>9–10 / Installed System</strong><span class="mono">Controlled execution</span></div><div class="report-mini-card"><strong>5–8 / Partial System</strong><span class="mono">Inconsistent execution</span></div><div class="report-mini-card"><strong>0–4 / No System ⚠️</strong><span class="mono">Reactive execution</span></div></div></div>
+        <div class="report-section"><h4>What this means</h4><p>Your challenges are not coming from lack of effort. They are coming from workflows that are not visible, repeatable, or system-driven enough. So work gets done—but it is harder than it should be, varies by project, and problems show up later than they should.</p></div>
+        <div class="report-body">${ordered.map((item, i) => {
+          const c = lensContent[item.type];
+          return `<article class="report-section">
+            <div class="mono">${String(i + 1).padStart(2,'0')} / Diagnostic lens</div>
+            <h4>${c.title}</h4>
+            <div class="report-meta-line"><span class="report-chip">Score: ${item.score} / 10</span><span class="report-chip">${scoreBand(item.score)}</span></div>
+            <h5>What this measures</h5><p>${c.measures}</p>
+            <h5>What this looks like in practice</h5><p><strong>Strong ${c.title}:</strong></p>${list(c.strong)}<p><strong>Weak ${c.title}:</strong></p>${list(c.weak)}
+            <h5>What we’re seeing</h5>${list(c.seeing)}
+            <h5>Why this matters</h5>${list(c.why)}
+            <h5>Recommended actions</h5>${list(c.actions)}
+            <div class="report-quote">Resource / Exercise: ${c.exercise}</div>
+          </article>`;
+        }).join('')}</div>
+        <div class="report-section report-final"><h4>Final takeaway</h4><p>You do not need more tools. You need a system that actually reflects how your work gets done.</p><p>Right now, most operations run on input → reaction → outcome. The goal is input → rule → action → controlled outcome.</p><h5>Next step</h5><p>A focused audit maps your workflows in detail, identifies exact breakdown points, and prioritizes what to fix first.</p><a class="btn" href="#offer">See Offer</a></div>
+      </div>`;
+    }
+    el('quizPrev')?.addEventListener('click', () => { if (index > 0) { index -= 1; renderQuiz(); } });
+    el('quizNext')?.addEventListener('click', () => {
+      if (index < quizQuestions.length - 1) { index += 1; renderQuiz(); }
+      else { renderResult(); el('quizResult')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+    if (el('embeddedQuiz')) renderQuiz();
+  })();
+
+  (() => {
+    const cards = Array.from(document.querySelectorAll('.how-card'));
+    cards.forEach(card => {
+      card.addEventListener('toggle', () => {
+        if (!card.open) return;
+        cards.forEach(other => {
+          if (other !== card) other.open = false;
+        });
+      });
+    });
+  })();
+
+ </script>
+</body>
+</html>
+

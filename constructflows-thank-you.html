@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Request Sent | ConstructFlows</title>
+  <meta name="description" content="Your ConstructFlows Contractor Time-Leak Audit request was submitted." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F6F4EF;
+      --paper: #FFFFFF;
+      --black: #111111;
+      --muted: #666666;
+      --border: #E5E5E5;
+      --display: 'Bebas Neue', 'Barlow Condensed', Impact, sans-serif;
+      --head: 'Barlow Condensed', Impact, sans-serif;
+      --body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+      --pad: clamp(24px, 5vw, 72px);
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100svh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px),
+        var(--paper);
+      background-size: 56px 56px;
+      color: var(--black);
+      font-family: var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      width: min(760px, calc(100% - 48px));
+      padding: clamp(30px, 6vw, 54px);
+      border: 1px solid var(--black);
+      background: var(--paper);
+      box-shadow: 12px 12px 0 var(--black);
+    }
+    .mono {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1 {
+      margin: 12px 0 18px;
+      font-family: var(--display);
+      font-size: clamp(58px, 8vw, 96px);
+      line-height: .86;
+      letter-spacing: -1.5px;
+      text-transform: uppercase;
+    }
+    p { color: var(--muted); font-size: 17px; line-height: 1.65; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .btn {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border: 1px solid var(--black);
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .7px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .btn-primary { background: var(--black); color: var(--paper); }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mono">Request submitted</div>
+    <h1>We got your information.</h1>
+    <p>Your Contractor Time-Leak Audit request has been sent to hello@constructionflows.com. We’ll follow up with next steps.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="index.html">Back to landing page</a>
+      <a class="btn" href="mailto:hello@constructionflows.com">Email ConstructionFlows</a>
+    </div>
+  </main>
+</body>
+</html>
